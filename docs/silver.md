@@ -1,46 +1,98 @@
 # Silver Layer
 
-## Purpose
+## Overview
 
-The Silver layer improves data quality through cleaning, validation and standardization while preserving business meaning.
+The Silver layer improves the quality and consistency of the Bronze data. This layer is responsible for validating, cleaning, and enriching the datasets while preserving their business meaning.
 
-## Transformations
+No aggregations are performed in this layer because aggregation represents business logic rather than data quality.
+
+---
+
+## Objectives
+
+- Improve data quality
+- Standardize data
+- Validate records
+- Detect anomalies
+- Preserve analytical flexibility
+
+---
+
+## Table Transformations
 
 ### Orders
 
-- Delivery anomalies flagged
-- Added is_anomaly column
+- Flagged delivery anomalies
+- Added `is_anomaly` indicator
+
+---
 
 ### Products
 
-- Missing categories replaced with "Unknown"
-- Portuguese category names translated to English
+- Replaced missing product categories with **Unknown**
+- Joined category translation table
+- Converted Portuguese category names into English
+
+---
 
 ### Customers
 
-- No transformation required
+No transformation required.
+
+Data quality checks confirmed:
+
+- No duplicate records
+- No missing primary keys
+
+---
 
 ### Sellers
 
-- No transformation required
+No transformation required.
 
-### Order Payments
+Verified for:
 
-- Preserved multiple payment records
-- No aggregation performed
+- Null values
+- Duplicate records
 
-### Order Reviews
+---
 
-- Fixed malformed multiline CSV parsing during Bronze ingestion
-- No further transformation required
+### Payments
+
+Payment records were intentionally preserved at payment-level granularity.
+
+Multiple payment records per order represent legitimate business behaviour rather than duplicate data.
+
+---
+
+### Reviews
+
+The original CSV contained multiline review comments.
+
+The Bronze ingestion process was modified to correctly parse multiline records.
+
+No additional transformations were required after successful ingestion.
+
+---
 
 ### Geolocation
 
-- Duplicate postal code prefixes intentionally preserved because multiple latitude/longitude values legitimately belong to the same area.
+Duplicate postal code prefixes were intentionally preserved.
+
+Multiple latitude and longitude values legitimately exist for the same postal code because they represent different physical locations within the same geographical area.
+
+---
 
 ## Characteristics
 
-- Data cleaning
-- Data validation
-- Data enrichment
-- No aggregation
+- Data Cleaning
+- Data Validation
+- Data Enrichment
+- Schema Standardization
+- No Aggregation
+
+---
+
+## Output
+
+Trusted datasets ready for dimensional modelling in the Gold layer.
