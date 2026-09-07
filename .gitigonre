@@ -1,18 +1,18 @@
-# Spark outputs
-bronze
-silver
-gold
+# Spark output
+bronze/
+silver/
+gold/
 
 # Spark metadata
-.crc
+*.crc
 _SUCCESS
 
 # Jupyter
-.ipynb_checkpoints
+.ipynb_checkpoints/
 
 # Python
-__pycache__
-.pyc
+__pycache__/
+*.pyc
 
 # OS
 .DS_Store
