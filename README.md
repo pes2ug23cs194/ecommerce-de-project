@@ -1,10 +1,18 @@
-# E-Commerce Data Warehouse using PySpark
+# Olist E-Commerce Data Warehouse & Business Analytics
 
 ## Project Overview
 
-This project implements an end-to-end Data Warehouse for the Olist Brazilian E-commerce dataset using the Medallion Architecture (Bronze → Silver → Gold). The pipeline ingests raw transactional data, validates and cleans it using PySpark, and transforms it into an analytics-ready Star Schema.
+This project implements an end-to-end Data Warehouse and Business Analytics
+workflow for the Olist Brazilian E-Commerce dataset using the Medallion
+Architecture (Bronze → Silver → Gold).
 
-The project demonstrates modern Data Engineering concepts including:
+The pipeline ingests raw transactional data, validates and cleans it using
+PySpark, and transforms it into an analytics-ready Star Schema. The resulting
+Gold layer is then used for business-oriented analysis of customer behavior,
+seller performance, and customer retention.
+
+The project demonstrates modern Data Engineering and Business Analytics
+concepts including:
 
 - Data ingestion
 - Data profiling
@@ -12,26 +20,40 @@ The project demonstrates modern Data Engineering concepts including:
 - Data cleaning and standardization
 - Dimensional modeling
 - Star schema design
-- Business analytics using SQL
+- Analytical SQL
+- Customer segmentation
+- Seller performance analysis
+- Cohort retention analysis
+- Business dashboarding
+- Data-driven business recommendations
 
 ---
 
 ## Objectives
 
-The primary objective of this project is to simulate a real-world Data Engineering workflow by building an analytical data warehouse from raw transactional data.
+The primary objective of this project is to simulate a real-world Data
+Engineering and Business Analytics workflow by building an analytical data
+warehouse from raw transactional data and using the resulting data to answer
+business questions.
 
 The project focuses on:
 
 - Preserving raw data integrity
 - Improving data quality through validation and standardization
 - Designing an efficient dimensional model
+- Building analytics-ready datasets
 - Supporting analytical SQL queries for business intelligence
+- Identifying customer retention opportunities
+- Evaluating seller operational performance
+- Translating analytical findings into business recommendations
 
 ---
 
 ## Dataset
 
 The project uses the **Olist Brazilian E-Commerce Dataset**.
+
+The dataset contains approximately 100K orders across 9 relational datasets.
 
 Source tables include:
 
@@ -50,19 +72,26 @@ Source tables include:
 ## Technology Stack
 
 | Technology | Purpose |
-|------------|----------|
-| Python | Programming Language |
-| PySpark | Distributed Data Processing |
-| SQL | Business Analytics |
-| Parquet | Columnar Storage |
-| Jupyter Notebook | Development Environment |
-| Git | Version Control |
+|------------|---------|
+| Python | Data analysis and transformation |
+| PySpark | Distributed data processing and ETL |
+| Pandas | Customer and cohort analysis |
+| Spark SQL | Analytical queries |
+| SQL | Business analytics |
+| PostgreSQL | Relational database |
+| Parquet | Columnar storage |
+| Excel | Business dashboard |
+| Jupyter Notebook | Development and analysis |
+| Git | Version control |
 
 ---
 
 ## Architecture
 
-*(Insert Architecture Diagram Here)*
+The project follows a layered data architecture that separates data
+ingestion, transformation, modeling, and business analysis.
+
+![Architecture](diagrams/architecture.png)
 
 ---
 
@@ -70,71 +99,15 @@ Source tables include:
 
 The warehouse follows the Medallion Architecture.
 
-```
-Raw CSV
-    ↓
- Bronze
-    ↓
- Silver
-    ↓
- Gold
-    ↓
- SQL Analytics
-```
-
-Documentation
-
-- Bronze Layer → docs/bronze.md
-- Silver Layer → docs/silver.md
-- Gold Layer → docs/gold.md
-
----
-
-## Key Features
-
-- End-to-End ETL/ELT Pipeline
-- Bronze, Silver and Gold Layers
-- Data Profiling
-- Data Validation
-- Data Standardization
-- Star Schema
-- Business-Oriented SQL Analytics
-
----
-
-## Project Structure
-
 ```text
-project/
-
-├── data/
-├── bronze/
-├── silver/
-├── gold/
-
-├── notebooks/
-│   ├── 01_bronze_layer.ipynb
-│   ├── 02_silver_layer.ipynb
-│   ├── 03_gold_layer.ipynb
-│   └── 04_sql_analytics.ipynb
-
-├── docs/
-│   ├── bronze.md
-│   ├── silver.md
-│   └── gold.md
-
-├── diagrams/
-
-└── README.md
-```
-
----
-
-## Future Improvements
-
-- Incremental Data Loading
-- Schema Evolution
-- Delta Lake
-- Apache Airflow
-- Cloud Deployment
-- Power BI Dashboard
+Raw CSV
+   ↓
+Bronze
+   ↓
+Silver
+   ↓
+Gold
+   ↓
+Business Analytics
+   ↓
+Excel Dashboard
