@@ -1,19 +1,34 @@
-# Spark output
-bronze/
-silver/
-gold/
-
-# Spark metadata
-*.crc
-_SUCCESS
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
 
 # Jupyter
 .ipynb_checkpoints/
 
-# Python
-__pycache__/
-*.pyc
+# Spark / Hadoop generated files
+_SUCCESS
+*.crc
+*.snappy.parquet
+part-*
 
-# OS
+# Generated data layers
+bronze/
+silver/
+gold/
+
+# Local analytics outputs
+notebooks/gold/
+notebooks/silver/
+
+# Python environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# OS files
 .DS_Store
 Thumbs.db
