@@ -1,0 +1,19 @@
+# Spark output
+bronze/
+silver/
+gold/
+
+# Spark metadata
+*.crc
+_SUCCESS
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
