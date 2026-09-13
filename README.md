@@ -7,34 +7,33 @@ workflow for the Olist Brazilian E-Commerce dataset using the Medallion
 Architecture (Bronze → Silver → Gold).
 
 The pipeline ingests raw transactional data, validates and cleans it using
-PySpark, and transforms it into an analytics-ready Star Schema. The resulting
-Gold layer is then used for business-oriented analysis of customer behavior,
-seller performance, and customer retention.
+PySpark, and transforms it into an analytics-ready Star Schema. The gold
+layer is analyzed entirely in **Spark SQL** — customer segmentation, seller
+risk scoring, and cohort retention — with pandas/matplotlib used only for
+the final visualization step. Findings are packaged into an interactive
+dashboard and a written business-recommendations report, including a
+benchmark-backed opportunity-sizing analysis for one recommendation.
 
 The project demonstrates modern Data Engineering and Business Analytics
 concepts including:
 
-- Data ingestion
-- Data profiling
-- Data quality validation
-- Data cleaning and standardization
-- Dimensional modeling
-- Star schema design
-- Analytical SQL
-- Customer segmentation
-- Seller performance analysis
+- Data ingestion and profiling
+- Data quality validation and standardization
+- Dimensional modeling and star schema design
+- Analytical SQL (Spark SQL, including window functions)
+- Customer segmentation (RFM)
+- Seller performance and risk scoring
 - Cohort retention analysis
-- Business dashboarding
-- Data-driven business recommendations
+- Business dashboarding and benchmark-backed opportunity sizing
 
 ---
 
 ## Objectives
 
 The primary objective of this project is to simulate a real-world Data
-Engineering and Business Analytics workflow by building an analytical data
-warehouse from raw transactional data and using the resulting data to answer
-business questions.
+Engineering and Business Analytics workflow: build an analytical data
+warehouse from raw transactional data, and use the resulting data to answer
+concrete business questions.
 
 The project focuses on:
 
@@ -51,11 +50,8 @@ The project focuses on:
 
 ## Dataset
 
-The project uses the **Olist Brazilian E-Commerce Dataset**.
-
-The dataset contains approximately 100K orders across 9 relational datasets.
-
-Source tables include:
+The project uses the **Olist Brazilian E-Commerce Dataset** — approximately
+100K orders across 9 relational tables:
 
 - Customers
 - Orders
@@ -75,12 +71,11 @@ Source tables include:
 |------------|---------|
 | Python | Data analysis and transformation |
 | PySpark | Distributed data processing and ETL |
-| Pandas | Customer and cohort analysis |
-| Spark SQL | Analytical queries |
-| SQL | Business analytics |
+| Spark SQL | All gold-layer analytics (segmentation, risk, cohorts) |
+| Pandas | Visualization data prep only (post-aggregation) |
 | PostgreSQL | Relational database |
 | Parquet | Columnar storage |
-| Excel | Business dashboard |
+| HTML / Chart.js | Interactive business dashboard |
 | Jupyter Notebook | Development and analysis |
 | Git | Version control |
 
@@ -93,11 +88,21 @@ ingestion, transformation, modeling, and business analysis.
 
 ![Architecture](diagrams/architecture.png)
 
+**Data flow across the pipeline:**
+
+![Data flow](diagrams/data_flow.png)
+
+**Silver-layer transformation logic:**
+
+![Silver transformation](diagrams/silver_transformation.png)
+
+**Gold-layer star schema:**
+
+![Star schema](diagrams/star_schema.png)
+
 ---
 
 ## Medallion Architecture
-
-The warehouse follows the Medallion Architecture.
 
 ```text
 Raw CSV
@@ -108,6 +113,152 @@ Silver
    ↓
 Gold
    ↓
-Business Analytics
+Business Analytics (Spark SQL)
    ↓
-Excel Dashboard
+Interactive Dashboard
+```
+
+Documentation:
+- Bronze Layer → `docs/bronze.md`
+- Silver Layer → `docs/silver.md`
+- Gold Layer → `docs/gold.md`
+- Business Insights → `docs/business-insights.md`
+
+---
+
+## Business Dashboard
+
+An interactive dashboard summarizing the gold-layer analysis — customer
+segments, seller risk, cohort retention, and a win-back opportunity-sizing
+projection — built with HTML and Chart.js.
+
+**Live version:** [View the live dashboard](https://pes2ug23cs194.github.io/ecommerce-de-project/dashboard.html)
+*(enable GitHub Pages in repo Settings → Pages, pointing at `dashboard.html`, to activate this link)*
+
+**Preview:**
+
+![Dashboard preview](diagrams/dashboard_preview.png)
+
+The dashboard file (`dashboard.html`) is self-contained — download it from
+the repo and open it directly in any browser if the live link isn't active.
+
+---
+
+## Key Findings
+
+Full write-up with methodology, caveats, and validation plan: [`docs/business-insights.md`](docs/business-insights.md)
+
+**1. Retention, not acquisition, is the constraint.**
+97% of customers place exactly one order. Month-1 repeat purchase rate
+across 20 monthly cohorts is 0.48%, declining to 0.17% by month 12.
+
+![Cohort retention](notebooks/analytics_exports/dashboard/charts/cohort_retention.png)
+
+**2. Revenue concentration is real but moderate.**
+
+![Customer segments](notebooks/analytics_exports/dashboard/charts/segment_summary.png)
+
+| Segment | Customers | % of customers | Revenue (R$) | % of revenue |
+|---|---|---|---|---|
+| Recent High-Value | 23,600 | 25.28% | 5,556,234.68 | 42.02% |
+| Lapsed High-Value | 23,078 | 24.72% | 5,458,910.12 | 41.29% |
+| Low-Value One-Time | 46,222 | 49.51% | 2,177,945.00 | 16.47% |
+| Repeat Loyalists | 458 | 0.49% | 28,408.31 | 0.21% |
+
+High-value segments (50.0% of customers) generate 83.3% of revenue.
+
+**3. Seller risk is concentrated in a small group with high cancellation rates.**
+Composite risk score weights cancellation rate 2x over late-delivery rate.
+
+![Seller risk](notebooks/analytics_exports/dashboard/charts/seller_risk.png)
+
+**4. Win-back opportunity sizing (Lapsed High-Value segment):**
+
+| Scenario | Reactivated customers | Incremental revenue (R$) | Lift |
+|---|---|---|---|
+| Conservative (12%, benchmark-sourced) | 2,769 | 654,979.26 | 12.0% |
+| Optimistic (20%, benchmark-sourced) | 4,616 | 1,091,868.64 | 20.0% |
+
+*This is a projection sized against a published industry benchmark, not a
+measured result — see `docs/business-insights.md` for how to validate it
+with an actual treatment/control campaign.*
+
+**Recommendations:**
+- Prioritize a win-back campaign for the 23,078 "Lapsed High-Value"
+  customers before further acquisition spend.
+- Flag sellers with `composite_risk_score > 70` for manual account review.
+
+---
+
+## Key Features
+
+- End-to-End ETL/ELT Pipeline
+- Bronze, Silver and Gold Layers
+- Data Profiling, Validation, and Standardization
+- Star Schema Design
+- RFM Customer Segmentation (Spark SQL window functions)
+- Seller Risk Scorecarding
+- Cohort Retention Analysis
+- Benchmark-Backed Opportunity Sizing
+- Interactive Business Dashboard
+
+---
+
+## Project Structure
+
+```text
+project/
+
+├── data/
+├── bronze/
+├── silver/
+├── gold/
+
+├── notebooks/
+│   ├── 01_bronze_layer.ipynb
+│   ├── 02_silver_layer.ipynb
+│   ├── 03_gold_layer.ipynb
+│   ├── final_analytics.ipynb         (Spark SQL marts + charts + win-back projection)
+│   └── analytics_exports/
+│       ├── cohort_retention.csv
+│       ├── customer_segmentation.csv
+│       ├── seller_scorecard.csv
+│       └── dashboard/
+│           ├── segment_summary.csv
+│           ├── top_seller_risk.csv
+│           ├── cohort_summary.csv
+│           ├── winback_projection.csv
+│           └── charts/
+│               ├── segment_summary.png
+│               ├── seller_risk.png
+│               └── cohort_retention.png
+
+├── dashboard.html
+
+├── docs/
+│   ├── bronze.md
+│   ├── silver.md
+│   ├── gold.md
+│   └── business-insights.md
+
+├── diagrams/
+│   ├── architecture.png
+│   ├── data_flow.png
+│   ├── silver_transformation.png
+│   ├── star_schema.png
+│   └── dashboard_preview.png
+
+└── README.md
+```
+
+---
+
+## Future Improvements
+
+- Incremental Data Loading
+- Schema Evolution
+- Delta Lake
+- Apache Airflow orchestration
+- Cloud Deployment
+- Treatment/control A/B test to validate the win-back projection with real data
+- Predictive model for customer churn / repeat-purchase likelihood
