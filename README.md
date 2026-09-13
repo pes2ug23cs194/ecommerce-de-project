@@ -128,20 +128,10 @@ Documentation:
 
 ## Business Dashboard
 
-An interactive dashboard summarizing the gold-layer analysis — customer
-segments, seller risk, cohort retention, and a win-back opportunity-sizing
-projection — built with HTML and Chart.js.
+An interactive dashboard summarizing the gold-layer analysis, including customer
+segments, seller risk, cohort retention, and win-back opportunity sizing.
 
-**Live version:** [View the live dashboard](https://pes2ug23cs194.github.io/ecommerce-de-project/dashboard.html)
-*(enable GitHub Pages in repo Settings → Pages, pointing at `dashboard.html`, to activate this link)*
-
-**Preview:**
-
-![Dashboard preview](diagrams/dashboard_preview.png)
-
-The dashboard file (`dashboard.html`) is self-contained — download it from
-the repo and open it directly in any browser if the live link isn't active.
-
+**Live Dashboard:** [View the live dashboard](https://pes2ug23cs194.github.io/ecommerce-de-project/dashboard.html)
 ---
 
 ## Key Findings
