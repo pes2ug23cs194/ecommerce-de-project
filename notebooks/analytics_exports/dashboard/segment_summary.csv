@@ -1,0 +1,5 @@
+segment_name,customers,revenue,customer_share_pct,revenue_share_pct,avg_monetary_per_customer
+Recent High-Value,23600,5556234.68,25.28,42.02,235.43
+Lapsed High-Value,23078,5458910.12,24.72,41.29,236.54
+Low-Value One-Time,46222,2177945.0,49.51,16.47,47.12
+Repeat Loyalists,458,28408.31,0.49,0.21,62.03
