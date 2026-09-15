@@ -129,7 +129,8 @@ Documentation:
 ## Business Dashboard
 
 An interactive dashboard summarizing the gold-layer analysis, including customer
-segments, seller risk, cohort retention, and win-back opportunity sizing.
+segments, seller risk, cohort retention, lapse-reason segmentation, and win-back
+opportunity sizing.
 
 **Live Dashboard:** [View the live dashboard](https://pes2ug23cs194.github.io/ecommerce-de-project/dashboard.html)
 ---
@@ -159,24 +160,45 @@ High-value segments (50.0% of customers) generate 83.3% of revenue.
 
 **3. Seller risk is concentrated in a small group with high cancellation rates.**
 Composite risk score weights cancellation rate 2x over late-delivery rate.
+*Caveat: `order_status = 'canceled'` doesn't distinguish buyer- from
+seller-initiated cancellations — treat the score as informative, not a
+clean causal signal, until cancellation-initiator data is available.*
 
 ![Seller risk](notebooks/analytics_exports/dashboard/charts/seller_risk.png)
 
-**4. Win-back opportunity sizing (Lapsed High-Value segment):**
+**4. Not all lapsed customers left for the same reason.**
+Splitting Lapsed High-Value by whether their most recent order showed a
+concrete negative signal (review score &le;2, late delivery, or cancellation):
+
+| Bucket | Customers | % of segment | Revenue (R$) |
+|---|---|---|---|
+| No Detected Bad Experience | 19,273 | 83.51% | 4,463,614.96 |
+| Bad Experience | 3,805 | 16.49% | 995,295.16 |
+
+*"No Detected Bad Experience" means no measurable platform-side failure —
+not that these customers are loyal or simply forgetful. The true reason
+(competitor activity, changed needs, price sensitivity) can't be
+distinguished from transaction data alone; recommended messaging below is
+chosen specifically because it doesn't presume a cause.*
+
+**5. Win-back opportunity sizing (Lapsed High-Value segment, overall):**
 
 | Scenario | Reactivated customers | Incremental revenue (R$) | Lift |
 |---|---|---|---|
 | Conservative (12%, benchmark-sourced) | 2,769 | 654,979.26 | 12.0% |
 | Optimistic (20%, benchmark-sourced) | 4,616 | 1,091,868.64 | 20.0% |
 
-*This is a projection sized against a published industry benchmark, not a
-measured result — see `docs/business-insights.md` for how to validate it
-with an actual treatment/control campaign.*
+*This is a segment-wide projection sized against a published industry
+benchmark, not a measured result — see `docs/business-insights.md` for how
+to validate it, and for why messaging (not the projected rate) should
+differ between the two buckets above.*
 
 **Recommendations:**
-- Prioritize a win-back campaign for the 23,078 "Lapsed High-Value"
-  customers before further acquisition spend.
-- Flag sellers with `composite_risk_score > 70` for manual account review.
+- Split win-back messaging by bucket: value-led reminder, no discount, for
+  the 19,273 customers with no detected issue; acknowledgment followed by
+  a real incentive for the 3,805 with a detected one.
+- Flag sellers with `composite_risk_score > 70` for manual account review,
+  pending the cancellation-attribution caveat above.
 
 ---
 
@@ -189,6 +211,7 @@ with an actual treatment/control campaign.*
 - RFM Customer Segmentation (Spark SQL window functions)
 - Seller Risk Scorecarding
 - Cohort Retention Analysis
+- Lapse-Reason Segmentation
 - Benchmark-Backed Opportunity Sizing
 - Interactive Business Dashboard
 
@@ -218,10 +241,12 @@ project/
 │           ├── top_seller_risk.csv
 │           ├── cohort_summary.csv
 │           ├── winback_projection.csv
+│           ├── lapse_reason_buckets.csv
 │           └── charts/
 │               ├── segment_summary.png
 │               ├── seller_risk.png
-│               └── cohort_retention.png
+│               ├── cohort_retention.png
+│               └── lapse_reason_buckets.png
 
 ├── dashboard.html
 
@@ -250,5 +275,6 @@ project/
 - Delta Lake
 - Apache Airflow orchestration
 - Cloud Deployment
-- Treatment/control A/B test to validate the win-back projection with real data
+- Treatment/control A/B test to validate the win-back and lapse-reason
+  messaging split with real data
 - Predictive model for customer churn / repeat-purchase likelihood
