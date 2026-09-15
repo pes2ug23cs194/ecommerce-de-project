@@ -114,13 +114,27 @@
     <p class="note">Validate with a treatment/control test before treating these numbers as confirmed — see docs/business-insights.md for methodology.</p>
   </div>
 
+  <div class="card full" style="margin-bottom:20px;">
+    <h2>Lapsed High-Value customers, by likely lapse reason</h2>
+    <p class="desc">Split by whether their most recent order showed a concrete negative signal (review score &le;2, late delivery, or cancellation)</p>
+    <table>
+      <thead><tr><th>Bucket</th><th>Customers</th><th>% of segment</th><th>Revenue (R$)</th></tr></thead>
+      <tbody>
+        <tr><td>No Detected Bad Experience</td><td>19,273</td><td>83.51%</td><td>4,463,614.96</td></tr>
+        <tr><td>Bad Experience</td><td>3,805</td><td>16.49%</td><td>995,295.16</td></tr>
+      </tbody>
+    </table>
+    <p class="note">"No Detected Bad Experience" means no measurable platform-side failure occurred &mdash; it does not mean these customers are loyal or forgetful. The true reason (competitor activity, changed needs, price sensitivity) can't be distinguished from transaction data alone. Recommended messaging is chosen specifically because it doesn't presume a cause &mdash; see docs/business-insights.md.</p>
+  </div>
+
   <div class="card full">
     <h2>Key findings</h2>
     <ul class="insights">
       <li><b>Retention is the biggest lever, not acquisition.</b> 97% of customers place exactly one order, and month-1 repeat rate is 0.48% — the business runs almost entirely on new-customer acquisition.</li>
       <li><b>Revenue concentration is real.</b> High-value segments (50.0% of customers) generate 83.3% of revenue, but Low-Value One-Time customers still contribute 16.5% on volume alone.</li>
-      <li><b>A small set of sellers carries outsized delivery risk.</b> The top-ranked seller has a 38.5% cancellation rate on just 13 orders — cancellations are weighted 2x in the risk score as a stronger reliability signal than late delivery.</li>
-      <li><b>Recommendation:</b> prioritize a win-back campaign for the 23,078 "Lapsed High-Value" customers (R$5.46M in historical revenue) before further acquisition spend, and flag sellers with risk score &gt;70 for manual review.</li>
+      <li><b>A small set of sellers carries outsized delivery risk</b> &mdash; though composite_risk_score can't currently distinguish buyer-initiated from seller-initiated cancellations, so treat it as informative rather than a clean causal signal.</li>
+      <li><b>83.5% of lapsed customers show no detected bad experience</b> &mdash; the dominant reason for lapsing isn't something Olist measurably did wrong, which argues for a value-led reminder over a discount-first approach for most of this segment.</li>
+      <li><b>Recommendation:</b> split win-back messaging by bucket &mdash; reminder-only for the 19,273 with no detected issue, acknowledgment-plus-incentive for the 3,805 with one, and flag sellers with risk score &gt;70 for manual review pending the cancellation-attribution caveat above.</li>
     </ul>
   </div>
 
